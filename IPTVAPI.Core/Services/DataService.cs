@@ -15,31 +15,6 @@ public class DataService
         this.context = _context;
     }
 
-    public async Task CreateChannelsAsync(ObservableCollection<OfflineChannel> entities)
-    {
-        await Task.Run(() =>
-        {
-            foreach (var entity in entities)
-            {
-                var found = context.Channels.Where(channel => channel.Id == entity.Id).Count();
-
-                if (found == 0)
-                {
-                    context.Channels.Add(entity);
-                }
-            }
-
-            try
-            {
-                context.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-        });
-    }
-
     public async Task CreateOrUpdateAsync(OfflineChannel channel, OfflineStream stream)
     {
         var channelFound = context.Channels.FirstOrDefault(c => c.Id == channel.Id);
