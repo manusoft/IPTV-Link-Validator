@@ -1,0 +1,10 @@
+﻿{
+    "profiles": {
+      "IPTVAPI (Package)": {
+        "commandName": "MsixPackage"
+      },
+      "IPTVAPI (Unpackaged)": {
+        "commandName": "Project"
+      }
+    }
+}

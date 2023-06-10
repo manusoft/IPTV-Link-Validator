@@ -1,0 +1,410 @@
+﻿<Page
+    x:Class="IPTVAPI.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
+    Background="{ThemeResource SolidBackgroundFillColorBaseBrush}"
+    mc:Ignorable="d">
+
+    <Grid x:Name="ContentArea">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid.Resources>
+            <ThemeShadow x:Name="BackgroundShadow"/>
+        </Grid.Resources>
+
+        <TextBlock
+            Grid.Row="0"
+            x:Uid="Main_Title"
+            Margin="10,0"
+            Style="{StaticResource PageTitleStyle}" />
+
+        <Pivot
+            Grid.Row="1"
+            SelectedIndex="{x:Bind ViewModel.PivotSelected, Mode=OneWay}">
+            <Pivot.RightHeader>
+                <CommandBar DefaultLabelPosition="Right">
+                    <AppBarButton Icon="Download" Label="Fetch from Online" Command="{x:Bind ViewModel.FetchDataCommand}"/>
+                    <AppBarButton Icon="Refresh" Label="Refresh" Command="{x:Bind ViewModel.RefreshCommand}"/>
+                </CommandBar>
+            </Pivot.RightHeader>
+            <PivotItem Header="Home">
+                <Grid
+                    Grid.Row="2"                
+                    ColumnSpacing="10"
+                    RowSpacing="10"
+                    Padding="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <!--Local Status-->
+                    <Grid
+                        Shadow="{StaticResource BackgroundShadow}"
+                        Translation="0,0,50">
+                        <StackPanel
+                        Padding="20"
+                        Grid.Column="0"
+                        Background="{StaticResource AcrylicBackgroundFillColorBaseBrush}"
+                        Spacing="10">
+                            <Grid>
+                                <TextBlock
+                                    Text="Local Database"
+                                    Style="{StaticResource SubtitleTextBlockStyle}"/>
+                                <ProgressRing 
+                                    IsIndeterminate="{x:Bind ViewModel.IsOfflineBusy, Mode=OneWay}" 
+                                    Visibility="{x:Bind ViewModel.IsOfflineBusy, Mode=OneWay}"
+                                    Foreground="Green"
+                                    Width="30"
+                                    Height="30"
+                                    HorizontalAlignment="Right"/>
+                            </Grid>
+                            <Border
+                                BorderBrush="{StaticResource AccentAcrylicInAppFillColorBaseBrush}"
+                                BorderThickness="1"/>
+                            <Grid
+                                Padding="20"
+                                RowSpacing="10"
+                                ColumnSpacing="30">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    Text="Channels Count"
+                                    Foreground="LightBlue"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Foreground="DeepSkyBlue"
+                                    Text="{x:Bind ViewModel.OfflineChannelsCount, Mode=OneWay}"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="1"
+                                    Foreground="LightBlue"
+                                    Text="Streams Count"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="1" 
+                                    Foreground="DeepSkyBlue"
+                                    Text="{x:Bind ViewModel.OfflineStreamsCount, Mode=OneWay}"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="2"
+                                    Foreground="LightBlue"
+                                    Text="New Channels"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Foreground="Orange"
+                                    Text="{x:Bind ViewModel.NewChannelsCount, Mode=OneWay}"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="3"
+                                    Foreground="LightBlue"
+                                    Text="New Streams"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="3"
+                                    Grid.Column="1"
+                                    Foreground="Orange"
+                                    Text="{x:Bind ViewModel.NewStreamsCount, Mode=OneWay}"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="4"
+                                    Foreground="LightBlue"
+                                    Text="Last Updated"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="4"
+                                    Grid.Column="1"  
+                                    Foreground="LightGray"
+                                    Text="{x:Bind ViewModel.LastOfflineUpdateAt, Mode=OneWay}"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+
+                    <!--Online Status-->
+                    <Grid
+                        Shadow="{StaticResource BackgroundShadow}"
+                        Translation="0,0,50"
+                        Grid.Column="1">
+                        <StackPanel
+                            Padding="20"                        
+                            Background="{StaticResource AcrylicBackgroundFillColorBaseBrush}"
+                            Spacing="10">
+                            <Grid>
+                                <TextBlock
+                                    Text="Online APIs"
+                                    Style="{StaticResource SubtitleTextBlockStyle}"/>
+                                <ProgressRing 
+                                    IsIndeterminate="{x:Bind ViewModel.IsOnlineBusy, Mode=OneWay}" 
+                                    Visibility="{x:Bind ViewModel.IsOnlineBusy, Mode=OneWay}"
+                                    Foreground="DeepSkyBlue"
+                                    Width="30"
+                                    Height="30"
+                                    HorizontalAlignment="Right"/>
+                            </Grid>
+                            <Border
+                                BorderBrush="{StaticResource AccentAcrylicInAppFillColorBaseBrush}"
+                                BorderThickness="1"/>
+                            <Grid
+                                Padding="20"
+                                RowSpacing="10"
+                                ColumnSpacing="30">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    Text="Channels Count"
+                                    Foreground="LightBlue"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Foreground="DeepSkyBlue"
+                                    Text="{x:Bind ViewModel.OnlineChannelsCount, Mode=OneWay}"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="1"
+                                    Foreground="LightBlue"
+                                    Text="Streams Count"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="1" 
+                                    Foreground="DeepSkyBlue"
+                                    Text="{x:Bind ViewModel.OnlineStreamsCount, Mode=OneWay}"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="2"
+                                    Foreground="LightBlue"
+                                    Text="Streams Removed"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Foreground="OrangeRed"
+                                    Text="{x:Bind ViewModel.OnlineStreamsRemovedCount, Mode=OneWay}"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="3"
+                                    Foreground="LightBlue"
+                                    Text="Status"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="3"
+                                    Grid.Column="1"  
+                                    Foreground="Green"
+                                    Text="{x:Bind ViewModel.OnlineStatus, Mode=OneWay}"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="4"
+                                    Foreground="LightBlue"
+                                    Text="Last Updated"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="4"
+                                    Grid.Column="1"  
+                                    Foreground="LightGray"
+                                    Text="{x:Bind ViewModel.LastOnlineUpdateAt, Mode=OneWay}"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+
+                    <!--Validation Status-->
+                    <Grid
+                        Grid.Row="1"
+                        Grid.ColumnSpan="2"
+                        Shadow="{StaticResource BackgroundShadow}"
+                        Translation="0,0,50">
+                        <StackPanel
+                            Padding="20"                       
+                            Background="{StaticResource AcrylicBackgroundFillColorBaseBrush}"
+                            Spacing="10">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    Text="Validate Streams"
+                                    Style="{StaticResource SubtitleTextBlockStyle}"
+                                    VerticalAlignment="Center"/>
+                                <ProgressRing
+                                    Grid.Column="1"
+                                    IsIndeterminate="{x:Bind ViewModel.IsValidationBusy, Mode=OneWay}" 
+                                    Visibility="{x:Bind ViewModel.IsValidationBusy, Mode=OneWay}"
+                                    Foreground="DeepSkyBlue"
+                                    Width="30"
+                                    Height="30"
+                                    HorizontalAlignment="Right"/>
+                                <CommandBar 
+                                    Grid.Column="2"
+                                    DefaultLabelPosition="Right">
+                                    <AppBarButton 
+                                        Icon="Play" 
+                                        Label="{x:Bind ViewModel.CommandText, Mode=OneWay}" 
+                                        Command="{x:Bind ViewModel.CheckLinksCommand}"/>
+                                </CommandBar>
+                            </Grid>
+                            <Border
+                                BorderBrush="{StaticResource AccentAcrylicInAppFillColorBaseBrush}"
+                                BorderThickness="1"/>
+                            <Grid
+                                Padding="20"
+                                RowSpacing="10"
+                                ColumnSpacing="30">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    Text="Progress"
+                                    Foreground="LightBlue"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Foreground="DeepSkyBlue"
+                                    Text="{x:Bind ViewModel.ProgressText, Mode=OneWay}"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="1"
+                                    Foreground="LightBlue"
+                                    Text="Offiline Count"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="1" 
+                                    Foreground="OrangeRed"
+                                    Text="{x:Bind ViewModel.OfflineCount, Mode=OneWay}"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="2"
+                                    Foreground="LightBlue"
+                                    Text="Online Count"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Foreground="GreenYellow"
+                                    Text="{x:Bind ViewModel.OnlineCount, Mode=OneWay}"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="3"
+                                    Foreground="LightBlue"
+                                    Text="Channel"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="3"
+                                    Grid.Column="1"  
+                                    Foreground="Orange"
+                                    Text="{x:Bind ViewModel.ChannelName, Mode=OneWay}"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="4"
+                                    Foreground="LightBlue"
+                                    Text="Status"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="4"
+                                    Grid.Column="1"  
+                                    Foreground="Green"
+                                    Text="{x:Bind ViewModel.StatusText, Mode=OneWay}"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="5"
+                                    Foreground="LightBlue"
+                                    Text="Last Updated"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="5"
+                                    Grid.Column="1"  
+                                    Foreground="LightGray"
+                                    Text="{x:Bind ViewModel.UpdatedDate, Mode=OneWay}"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+
+                </Grid>
+            </PivotItem>
+            <PivotItem Header="Channels">
+                <Grid Margin="0,10">
+                    <controls:DataGrid
+                        AutoGenerateColumns="False"
+                        GridLinesVisibility="Horizontal"
+                        ItemsSource="{x:Bind ViewModel.OfflineChannelList, Mode=OneWay}">
+                        <controls:DataGrid.Resources>
+                            <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundColor" Color="Transparent" />
+                        </controls:DataGrid.Resources>
+                        <controls:DataGrid.Columns>
+                            <controls:DataGridTextColumn Binding="{Binding Id}" Header="Id" />
+                            <controls:DataGridTextColumn Binding="{Binding Name}" Header="Channel Name" />
+                            <controls:DataGridTextColumn Binding="{Binding Country}" Header="Country" />
+                            <controls:DataGridTextColumn Binding="{Binding IsNsfw}" Header="IsNsfw" />
+                            <controls:DataGridTextColumn Binding="{Binding Website}" Header="Website" />
+                            <controls:DataGridTextColumn Binding="{Binding Logo}" Header="Logo Url" />
+                        </controls:DataGrid.Columns>
+                    </controls:DataGrid>
+                </Grid>
+            </PivotItem>
+            <PivotItem Header="Streams">
+                <Grid Margin="0,10">
+                    <controls:DataGrid
+                        AutoGenerateColumns="False"
+                        GridLinesVisibility="Horizontal"
+                        ItemsSource="{x:Bind ViewModel.OfflineStreamsList, Mode=OneWay}">
+                        <controls:DataGrid.Resources>
+                            <SolidColorBrush x:Key="DataGridColumnHeaderBackgroundColor" Color="Transparent" />
+                        </controls:DataGrid.Resources>
+                        <controls:DataGrid.Columns>
+                            <controls:DataGridTextColumn Binding="{Binding Id}" Header="Id" />
+                            <controls:DataGridTextColumn Binding="{Binding ChannelId}" Header="Channel Name" />
+                            <controls:DataGridTextColumn Binding="{Binding IsOnline}" Header="Online Status" />
+                            <controls:DataGridTextColumn Binding="{Binding LastCheckedAt}" Header="Last Checked" />
+                            <controls:DataGridTextColumn Binding="{Binding Url}" Header="Url" />
+                        </controls:DataGrid.Columns>
+                    </controls:DataGrid>
+                </Grid>
+            </PivotItem>
+        </Pivot>
+    </Grid>
+</Page>
