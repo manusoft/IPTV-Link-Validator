@@ -410,17 +410,16 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
         if (OfflineStreamsList is null) return;
 
         List<RootChannel> rootChannels = new List<RootChannel>();
-        List<RootStream> rootStreams = new List<RootStream>();
 
-        var onlineStreams = OfflineStreamsList.Where(stream => stream.IsOnline is true);
+        var goodStreams = OfflineStreamsList.Where(stream => stream.IsOnline is true);
 
         foreach (var channel in OfflineChannelList)
         {
-            List<OfflineStream> streams = onlineStreams.Where(stream => stream.ChannelId == channel.Id).ToList();
+            List<OfflineStream> streams = goodStreams.Where(stream => stream.ChannelId == channel.Id).ToList();
 
             if (streams.Count is not 0)
             {
-                rootStreams.Clear();
+                var rootStreams = new List<RootStream>();
 
                 foreach (var stream in streams)
                 {
@@ -452,7 +451,7 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
 
         // Serialize the object to a JSON string
         string jsonContent = JsonConvert.SerializeObject(root, Formatting.Indented);
-        File.WriteAllText(@"c:\backup\root.json", jsonContent);
+        File.WriteAllText(@"c:\backup\iptv.json", jsonContent);
         Debug.WriteLine("File Saved.");
     }
 
