@@ -1,5 +1,7 @@
 # IPTV API
 
+![Screenshot 2023-06-17 032157](https://github.com/manusoft/IPTVAPI/assets/83714923/da519ad0-ab52-4aad-ad56-603c1ac2222b)
+
 This repository contains a database project for IPTV (Internet Protocol television) using WinUI 3. 
 
 IPTV is a system through which television services are delivered using the Internet Protocol suite over a packet-switched network such as the Internet, instead of being delivered through traditional terrestrial, satellite signal, and cable television formats. This project aims to provide a comprehensive database solution for managing IPTV channels, programs, and related information.
