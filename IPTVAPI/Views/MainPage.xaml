@@ -31,7 +31,8 @@
                 <CommandBar DefaultLabelPosition="Right">
                     <AppBarButton Icon="Download" Label="Fetch from Online" Command="{x:Bind ViewModel.FetchDataCommand}"/>
                     <AppBarButton Icon="Refresh" Label="Refresh" Command="{x:Bind ViewModel.RefreshCommand}"/>
-                    <AppBarButton Icon="Upload" Label="Export to Json" Command="{x:Bind ViewModel.SaveToJsonCommand}"/>
+                    <AppBarButton Icon="Upload" Label="Export All" Command="{x:Bind ViewModel.SaveAllCommand}"/>
+                    <AppBarButton Icon="Globe" Label="Export By Country" Command="{x:Bind ViewModel.SaveByCountryCommand}"/>
                 </CommandBar>
             </Pivot.RightHeader>
             <PivotItem Header="Home">
