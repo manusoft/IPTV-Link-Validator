@@ -7,9 +7,7 @@ using Microsoft.UI.Xaml.Controls;
 using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
 using System.Net;
-using System.Security.Cryptography.X509Certificates;
 
 namespace IPTVAPI.ViewModels;
 
@@ -18,6 +16,8 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
     private readonly DataService dataService;
     private readonly FetchService fetchService;
     private CancellationTokenSource? cancellationTokenSource;
+
+    public ObservableCollection<Country> CountryList { get; set; } = new ObservableCollection<Country>();
     public ObservableCollection<OfflineStream> CurrentStreamList { get; set; } = new ObservableCollection<OfflineStream>();
 
     public MainViewModel()
@@ -33,13 +33,15 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
     {
         PivotSelected = 0;
         await PopulateOfflineDataAsync();
+        await PopulateCountiresAsync();
     }
 
     [RelayCommand]
     private async void Refresh()
     {
         await PopulateOfflineDataAsync();
-    }
+        await PopulateCountiresAsync();
+    }    
 
     private async Task PopulateOfflineDataAsync()
     {
@@ -92,6 +94,35 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
             LastOfflineUpdateAt = DateTime.Now.ToString("F");
         }
     }
+
+    private async Task PopulateCountiresAsync()
+    {
+        if (IsOfflineBusy) return;
+
+        try
+        {
+            IsOfflineBusy = true;
+
+            CountryList.Clear();
+
+            var countries = await fetchService.GetCountriesLocalAsync();
+
+            foreach (var country in countries)
+            {
+                CountryList.Add(country);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"{ex.Message}");
+        }
+        finally
+        {
+            IsOfflineBusy = false;
+        }
+    }
+
+
 
     [RelayCommand]
     private async Task FetchData()
@@ -195,7 +226,6 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
         if (IsValidationBusy)
         {
             StopProcess();
-            StatusText = "Process Completed";
         }
         else
         {
@@ -231,6 +261,7 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
         {
             // Reset the flag and re-enable the button
             IsValidationBusy = false;
+            StatusText = "Done";
             // Enable the button or perform any other necessary UI updates
         }
     }
@@ -401,8 +432,9 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
         }
     }
 
+    // Save all to json file
     [RelayCommand]
-    async Task SaveToJsonAsync()
+    async Task SaveAllAsync()
     {
         await PopulateOfflineDataAsync();
 
@@ -444,15 +476,103 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
             }
         }
 
-        Root root = new Root();
-        root.Total = rootChannels.Count;
-        root.LastUpdated = DateTime.Now.ToString();
-        root.Channels = rootChannels;
+        //Root root = new Root();
+        //root.Total = rootChannels.Count;
+        //root.LastUpdated = DateTime.Now.ToString();
+        //root.Channels = rootChannels;
 
-        // Serialize the object to a JSON string
-        string jsonContent = JsonConvert.SerializeObject(root, Formatting.Indented);
-        File.WriteAllText(@"c:\backup\iptv.json", jsonContent);
-        Debug.WriteLine("File Saved.");
+        try
+        {
+            // Serialize the object to a JSON string
+            string jsonContent = JsonConvert.SerializeObject(rootChannels, Formatting.Indented);
+            File.WriteAllText(@"c:\backup\api\IPTV.json", jsonContent);
+            Debug.WriteLine("File Saved IPTV.json.");
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+        }
+
+        ShowDialog("Completed", "File save success.");
+    }
+
+    // Save by country to json files
+    [RelayCommand]
+    async Task SaveByCountryAsync()
+    {
+        await PopulateOfflineDataAsync();
+
+        if (OfflineChannelList is null) return;
+        if (OfflineStreamsList is null) return;        
+
+        var goodStreams = OfflineStreamsList.Where(stream => stream.IsOnline is true);
+
+        if (CountryList.Count == 0) return;
+
+        foreach (var country in CountryList)
+        {
+            List<RootChannel> rootChannels = new List<RootChannel>();
+
+            var channelsByCountry = OfflineChannelList.Where(channel => channel.Country.Contains(country.Code));
+
+            if (channelsByCountry is not null)
+            {
+                foreach (var channel in channelsByCountry)
+                {
+                    List<OfflineStream> streams = goodStreams.Where(stream => stream.ChannelId == channel.Id).ToList();
+
+                    if (streams.Count is not 0)
+                    {
+                        var rootStreams = new List<RootStream>();
+
+                        foreach (var stream in streams)
+                        {
+                            rootStreams.Add(new RootStream
+                            {
+                                Url = stream.Url,
+                            });
+                        }
+
+                        rootChannels.Add(new RootChannel
+                        {
+                            Id = channel.Id,
+                            Name = channel.Name,
+                            Country = channel.Country,
+                            Languages = channel.Languages,
+                            Categories = channel.Categories,
+                            IsNsfw = channel.IsNsfw,
+                            Website = channel.Website,
+                            Logo = channel.Logo,
+                            Streams = rootStreams,
+                        });
+                    }
+                }
+
+                // Serialize the object to a JSON string
+                try
+                {
+                    string jsonContent = JsonConvert.SerializeObject(rootChannels, Formatting.Indented);
+                    File.WriteAllText($"c:/backup/api/{country.Code}.json", jsonContent);
+                    Debug.WriteLine($"File Saved to {country.Code}.json");
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
+            }
+        }
+
+        ShowDialog("Completed", "Files save by countires success.");
+    }
+
+    private async void ShowDialog(string title, string message)
+    {
+        ContentDialog contentDialog = new ContentDialog();
+        contentDialog.XamlRoot = App.MainWindow.Content.XamlRoot;
+        contentDialog.Title = title;
+        contentDialog.Content = message;
+        contentDialog.CloseButtonText = "OK";
+        await contentDialog.ShowAsync();
     }
 
 

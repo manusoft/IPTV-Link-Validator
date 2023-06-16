@@ -3,7 +3,6 @@ using IPTVAPI.Contracts.Services;
 using IPTVAPI.Core.Contracts.Services;
 using IPTVAPI.Core.Data;
 using IPTVAPI.Core.Services;
-using IPTVAPI.Helpers;
 using IPTVAPI.Models;
 using IPTVAPI.Services;
 using IPTVAPI.ViewModels;
@@ -13,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
+using WinRT.Interop;
 
 namespace IPTVAPI;
 
@@ -41,7 +41,7 @@ public partial class App : Application
     }
 
     public static WindowEx MainWindow { get; } = new MainWindow();
-
+    public static nint hwnd;
     public static UIElement? AppTitlebar { get; set; }
 
     public App()
@@ -107,6 +107,8 @@ public partial class App : Application
     protected async override void OnLaunched(LaunchActivatedEventArgs args)
     {
         base.OnLaunched(args);
+
+        hwnd = WindowNative.GetWindowHandle(MainWindow);
 
         await App.GetService<IActivationService>().ActivateAsync(args);
     }
