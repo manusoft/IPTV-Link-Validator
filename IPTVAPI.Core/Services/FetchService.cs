@@ -1,10 +1,4 @@
-﻿using System.Diagnostics;
-using System.Reflection;
-using IPTVAPI.Core.Constants;
-using IPTVAPI.Core.Models;
-using Newtonsoft.Json;
-
-namespace IPTVAPI.Core.Services;
+﻿namespace IPTVAPI.Core.Services;
 
 public class FetchService
 {

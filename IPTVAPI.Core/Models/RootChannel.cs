@@ -1,6 +1,4 @@
-﻿using System.Collections.ObjectModel;
-
-namespace IPTVAPI.Core.Models;
+﻿namespace IPTVAPI.Core.Models;
 
 public class RootChannel
 {

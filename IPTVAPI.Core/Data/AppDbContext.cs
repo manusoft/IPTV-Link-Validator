@@ -1,7 +1,4 @@
-﻿using IPTVAPI.Core.Models;
-using Microsoft.EntityFrameworkCore;
-
-namespace IPTVAPI.Core.Data;
+﻿namespace IPTVAPI.Core.Data;
 
 public class AppDbContext : DbContext
 {

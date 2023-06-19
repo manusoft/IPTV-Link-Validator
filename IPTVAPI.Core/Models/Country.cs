@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace IPTVAPI.Core.Models;
+﻿namespace IPTVAPI.Core.Models;
 
 public class Country
 {
