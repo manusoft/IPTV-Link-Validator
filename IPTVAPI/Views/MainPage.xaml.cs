@@ -1,15 +1,8 @@
-﻿using IPTVAPI.ViewModels;
-
-using Microsoft.UI.Xaml.Controls;
-
-namespace IPTVAPI.Views;
+﻿namespace IPTVAPI.Views;
 
 public sealed partial class MainPage : Page
 {
-    public MainViewModel ViewModel
-    {
-        get;
-    }
+    public MainViewModel ViewModel { get; }
 
     public MainPage()
     {

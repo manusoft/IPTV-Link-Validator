@@ -1,15 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using IPTVAPI.Contracts.ViewModels;
-using IPTVAPI.Core.Models;
-using IPTVAPI.Core.Services;
-using Microsoft.UI.Xaml.Controls;
-using Newtonsoft.Json;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Net;
-
-namespace IPTVAPI.ViewModels;
+﻿namespace IPTVAPI.ViewModels;
 
 public partial class MainViewModel : BaseViewModel, INavigationAware
 {
@@ -82,6 +71,9 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
 
                 NewChannelsCount = OnlineChannelsCount - OfflineChannelsCount;
                 NewStreamsCount = OnlineStreamsCount - OfflineStreamsCount;
+
+                if(NewChannelsCount < 0) { NewChannelsCount = 0; }
+                if (NewStreamsCount < 0) { NewStreamsCount = 0; }
             }
         }
         catch (Exception ex)
@@ -121,8 +113,6 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
             IsOfflineBusy = false;
         }
     }
-
-
 
     [RelayCommand]
     private async Task FetchData()
@@ -200,6 +190,8 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
                 NewStreamsCount = OnlineStreamsCount - OfflineStreamsCount;
             }
 
+            if (NewChannelsCount < 0) { NewChannelsCount = 0; }
+            if (NewStreamsCount < 0) { NewStreamsCount = 0; }
         }
         catch (Exception ex)
         {
@@ -212,7 +204,6 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
             LastOnlineUpdateAt = DateTime.Now.ToString("F");
         }
     }
-
 
     [RelayCommand]
     void CheckLinks()
@@ -275,6 +266,8 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
     {
         try
         {
+            int newoffline = 0;
+            int newonline = 0;
             CompletedCount = 0;
 
             if (OnlineStreamList is null) return;
@@ -363,12 +356,14 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
                                 ChannelId = stream.Channel,
                                 Url = stream.Url,
                                 IsOnline = true,
+                                CheckCount = 0,
                                 LastCheckedAt = DateTime.Now,
                             };
 
                             await dataService.CreateOrUpdateAsync(offlineChannel, offlineStream);
 
                             OnlineCount++;
+                            newonline++;
                         }
                     }
                     else // not valid then online startus as false
@@ -394,11 +389,13 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
                                 ChannelId = stream.Channel,
                                 Url = stream.Url,
                                 IsOnline = false,
+                                CheckCount = 0,
                                 LastCheckedAt = DateTime.Now,
                             };
 
                             await dataService.CreateOrUpdateAsync(offlineChannel, offlineStream);
                             OfflineCount++;
+                            newoffline++;
                         }
                     }
                 }
@@ -476,17 +473,12 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
             }
         }
 
-        //Root root = new Root();
-        //root.Total = rootChannels.Count;
-        //root.LastUpdated = DateTime.Now.ToString();
-        //root.Channels = rootChannels;
-
         try
         {
             // Serialize the object to a JSON string
             string jsonContent = JsonConvert.SerializeObject(rootChannels, Formatting.Indented);
-            File.WriteAllText(@"c:\backup\api\IPTV.json", jsonContent);
-            Debug.WriteLine("File Saved IPTV.json.");
+            File.WriteAllText(@"c:\backup\api\all.json", jsonContent);
+            Debug.WriteLine("File Saved all.json.");
         }
         catch (Exception ex)
         {
@@ -552,8 +544,8 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
                 try
                 {
                     string jsonContent = JsonConvert.SerializeObject(rootChannels, Formatting.Indented);
-                    File.WriteAllText($"c:/backup/api/{country.Code}.json", jsonContent);
-                    Debug.WriteLine($"File Saved to {country.Code}.json");
+                    File.WriteAllText($"c:/backup/api/{country.Code.ToLower()}.json", jsonContent);
+                    Debug.WriteLine($"File Saved to {country.Code.ToLower()}.json");
                 }
                 catch (Exception ex)
                 {
