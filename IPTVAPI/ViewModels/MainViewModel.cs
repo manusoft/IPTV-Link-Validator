@@ -415,7 +415,7 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex.Message);
+            ShowDialog("Error", ex.InnerException?.Message);
         }
         finally
         {

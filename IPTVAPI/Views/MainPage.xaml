@@ -273,7 +273,7 @@
                                     Grid.Column="1"
                                     IsIndeterminate="{x:Bind ViewModel.IsValidationBusy, Mode=OneWay}" 
                                     Visibility="{x:Bind ViewModel.IsValidationBusy, Mode=OneWay}"
-                                    Foreground="DeepSkyBlue"
+                                    Foreground="DeepPink"
                                     Width="30"
                                     Height="30"
                                     HorizontalAlignment="Right"/>

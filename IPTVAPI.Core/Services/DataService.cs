@@ -39,14 +39,29 @@ public class DataService
             context.Update(streamFound);
         }
 
-        await context.SaveChangesAsync();
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 
 
     public async Task UpdateStreamAsync(OfflineStream entity)
     {
         context.Streams.Update(entity);
-        await context.SaveChangesAsync();
+
+        try
+        {
+
+        }
+        catch (Exception ex)
+        {
+            throw new Exception(ex.Message);
+        }
     }
 
     public async Task<IEnumerable<OfflineChannel>> GetChannelsAsync()
