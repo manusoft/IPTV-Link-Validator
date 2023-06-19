@@ -11,25 +11,31 @@ public class DataService
 
     public async Task CreateOrUpdateAsync(OfflineChannel channel, OfflineStream stream)
     {
-        var channelFound = context.Channels.FirstOrDefault(c => c.Id == channel.Id);
+        var channelFound = context.Channels
+            .AsNoTracking()
+            .FirstOrDefault(c => c.Id == channel.Id);
 
         if (channelFound is null)
         {
             context.Channels.Add(channel);
         }
 
-        var streamFound = context.Streams.FirstOrDefault(s => s.Url == stream.Url);
+        var streamFound = context.Streams
+            .AsNoTracking()
+            .FirstOrDefault(s => s.Url == stream.Url);
 
         if (streamFound is null)
         {
             context.Streams.Add(stream);
         }
         else
-        {           
+        {
             streamFound.ChannelId = stream.ChannelId;
             streamFound.Url = stream.Url;
             streamFound.IsOnline = stream.IsOnline;
-            streamFound.LastCheckedAt = stream.LastCheckedAt;
+            streamFound.CheckCount = stream.CheckCount;
+            streamFound.CreatedAt = stream.CreatedAt;
+            streamFound.UpdatedAt = stream.UpdatedAt;
             context.Update(streamFound);
         }
 
@@ -39,14 +45,8 @@ public class DataService
 
     public async Task UpdateStreamAsync(OfflineStream entity)
     {
-        var currentStream = context.Streams.FirstOrDefault(stream => stream.Id == entity.Id);
-
-        if (currentStream is not null)
-        {
-            currentStream.CheckCount++;
-            context.Streams.Update(currentStream);
-            await context.SaveChangesAsync();
-        }        
+        context.Streams.Update(entity);
+        await context.SaveChangesAsync();
     }
 
     public async Task<IEnumerable<OfflineChannel>> GetChannelsAsync()

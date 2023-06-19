@@ -8,7 +8,8 @@ public class OfflineStream
     public string Url { get; set; } // Stream URL
     public bool IsOnline { get; set; } // Check for working link
     public int CheckCount { get; set; } // Inrcement counts each time of checking
-    public DateTime LastCheckedAt { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
     public virtual OfflineChannel Channel { get; set; } = null!;
 }
 

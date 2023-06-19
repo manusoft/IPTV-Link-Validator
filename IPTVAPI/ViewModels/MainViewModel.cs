@@ -30,7 +30,7 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
     {
         await PopulateOfflineDataAsync();
         await PopulateCountiresAsync();
-    }    
+    }
 
     private async Task PopulateOfflineDataAsync()
     {
@@ -72,7 +72,7 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
                 NewChannelsCount = OnlineChannelsCount - OfflineChannelsCount;
                 NewStreamsCount = OnlineStreamsCount - OfflineStreamsCount;
 
-                if(NewChannelsCount < 0) { NewChannelsCount = 0; }
+                if (NewChannelsCount < 0) { NewChannelsCount = 0; }
                 if (NewStreamsCount < 0) { NewStreamsCount = 0; }
             }
         }
@@ -290,7 +290,9 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
                 // Stream found in the databsae
                 if (getOffStream is not null)
                 {
-                    TimeSpan timeSpan = DateTime.Now - getOffStream.LastCheckedAt;
+                    TimeSpan timeSpan = DateTime.Now - getOffStream.UpdatedAt;
+
+                    ChannelName = $"{ChannelName} ({timeSpan.Days.ToString()} days)";
 
                     // Check if exceed 7 days
                     if (timeSpan.Days > 7)
@@ -305,7 +307,9 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
                                 ChannelId = getOffStream.ChannelId,
                                 Url = getOffStream.Url,
                                 IsOnline = true,
-                                LastCheckedAt = DateTime.Now,
+                                CheckCount = getOffStream.CheckCount + 1,
+                                CreatedAt = getOffStream.CreatedAt,
+                                UpdatedAt = DateTime.Now,
                             };
 
                             await dataService.UpdateStreamAsync(offlineStream);
@@ -320,7 +324,9 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
                                 ChannelId = getOffStream.ChannelId,
                                 Url = getOffStream.Url,
                                 IsOnline = false,
-                                LastCheckedAt = DateTime.Now,
+                                CheckCount = getOffStream.CheckCount + 1,
+                                CreatedAt = getOffStream.CreatedAt,
+                                UpdatedAt = DateTime.Now,
                             };
 
                             await dataService.UpdateStreamAsync(offlineStream);
@@ -357,7 +363,8 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
                                 Url = stream.Url,
                                 IsOnline = true,
                                 CheckCount = 0,
-                                LastCheckedAt = DateTime.Now,
+                                CreatedAt =DateTime.Now,
+                                UpdatedAt = DateTime.Now,
                             };
 
                             await dataService.CreateOrUpdateAsync(offlineChannel, offlineStream);
@@ -390,7 +397,8 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
                                 Url = stream.Url,
                                 IsOnline = false,
                                 CheckCount = 0,
-                                LastCheckedAt = DateTime.Now,
+                                CreatedAt = DateTime.Now,
+                                UpdatedAt = DateTime.Now,
                             };
 
                             await dataService.CreateOrUpdateAsync(offlineChannel, offlineStream);
@@ -495,7 +503,7 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
         await PopulateOfflineDataAsync();
 
         if (OfflineChannelList is null) return;
-        if (OfflineStreamsList is null) return;        
+        if (OfflineStreamsList is null) return;
 
         var goodStreams = OfflineStreamsList.Where(stream => stream.IsOnline is true);
 
