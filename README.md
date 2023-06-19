@@ -1,5 +1,7 @@
 # IPTV API
 
+<p align="left"><img src="https://visitor-badge.laobi.icu/badge?page_id=manusoft.IPTVAPI" style="max-width: 100%;"></p>
+
 ![Screenshot 2023-06-17 032157](https://github.com/manusoft/IPTVAPI/assets/83714923/da519ad0-ab52-4aad-ad56-603c1ac2222b)
 
 This repository contains a database project for IPTV (Internet Protocol television) using WinUI 3. 
