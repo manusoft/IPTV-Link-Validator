@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using CommunityToolkit.Mvvm.ComponentModel;
-using IPTVAPI.Core.Models;
-
-namespace IPTVAPI.ViewModels;
+﻿namespace IPTVAPI.ViewModels;
 public partial class BaseViewModel : ObservableRecipient
 {
     [ObservableProperty]

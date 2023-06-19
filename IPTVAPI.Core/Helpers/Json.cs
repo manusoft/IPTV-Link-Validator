@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace IPTVAPI.Core.Helpers;
+﻿namespace IPTVAPI.Core.Helpers;
 
 public static class Json
 {

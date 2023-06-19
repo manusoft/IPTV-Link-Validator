@@ -1,9 +1,4 @@
-﻿using IPTVAPI.Contracts.Services;
-using IPTVAPI.ViewModels;
-
-using Microsoft.UI.Xaml;
-
-namespace IPTVAPI.Activation;
+﻿namespace IPTVAPI.Activation;
 
 public class DefaultActivationHandler : ActivationHandler<LaunchActivatedEventArgs>
 {

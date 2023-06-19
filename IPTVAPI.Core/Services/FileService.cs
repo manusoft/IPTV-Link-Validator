@@ -1,10 +1,4 @@
-﻿using System.Text;
-
-using IPTVAPI.Core.Contracts.Services;
-
-using Newtonsoft.Json;
-
-namespace IPTVAPI.Core.Services;
+﻿namespace IPTVAPI.Core.Services;
 
 public class FileService : IFileService
 {

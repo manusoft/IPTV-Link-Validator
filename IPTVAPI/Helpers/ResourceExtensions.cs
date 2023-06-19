@@ -1,6 +1,4 @@
-﻿using Microsoft.Windows.ApplicationModel.Resources;
-
-namespace IPTVAPI.Helpers;
+﻿namespace IPTVAPI.Helpers;
 
 public static class ResourceExtensions
 {

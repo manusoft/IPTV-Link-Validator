@@ -1,12 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-
-using IPTVAPI.Contracts.Services;
-using IPTVAPI.ViewModels;
-using IPTVAPI.Views;
-
-using Microsoft.UI.Xaml.Controls;
-
-namespace IPTVAPI.Services;
+﻿namespace IPTVAPI.Services;
 
 public class PageService : IPageService
 {

@@ -1,8 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace IPTVAPI.Core.Models;
+﻿namespace IPTVAPI.Core.Models;
 
 [Table("Channel")]
 public class OfflineChannel
