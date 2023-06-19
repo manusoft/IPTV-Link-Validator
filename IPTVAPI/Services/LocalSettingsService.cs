@@ -1,15 +1,4 @@
-﻿using IPTVAPI.Contracts.Services;
-using IPTVAPI.Core.Contracts.Services;
-using IPTVAPI.Core.Helpers;
-using IPTVAPI.Helpers;
-using IPTVAPI.Models;
-
-using Microsoft.Extensions.Options;
-
-using Windows.ApplicationModel;
-using Windows.Storage;
-
-namespace IPTVAPI.Services;
+﻿namespace IPTVAPI.Services;
 
 public class LocalSettingsService : ILocalSettingsService
 {

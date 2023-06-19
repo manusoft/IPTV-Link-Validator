@@ -1,6 +1,4 @@
-﻿using Microsoft.UI.Xaml.Controls;
-
-namespace IPTVAPI.Helpers;
+﻿namespace IPTVAPI.Helpers;
 
 public static class FrameExtensions
 {

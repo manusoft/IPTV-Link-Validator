@@ -1,16 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿namespace IPTVAPI.Services;
 
-using IPTVAPI.Contracts.Services;
-using IPTVAPI.Contracts.ViewModels;
-using IPTVAPI.Helpers;
-
-using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Navigation;
-
-namespace IPTVAPI.Services;
-
-// For more information on navigation between pages see
-// https://github.com/microsoft/TemplateStudio/blob/main/docs/WinUI/navigation.md
 public class NavigationService : INavigationService
 {
     private readonly IPageService _pageService;

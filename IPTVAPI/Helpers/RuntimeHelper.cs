@@ -1,7 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using System.Text;
-
-namespace IPTVAPI.Helpers;
+﻿namespace IPTVAPI.Helpers;
 
 public class RuntimeHelper
 {

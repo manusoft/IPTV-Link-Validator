@@ -1,11 +1,4 @@
-﻿using IPTVAPI.Activation;
-using IPTVAPI.Contracts.Services;
-using IPTVAPI.Views;
-
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-
-namespace IPTVAPI.Services;
+﻿namespace IPTVAPI.Services;
 
 public class ActivationService : IActivationService
 {
