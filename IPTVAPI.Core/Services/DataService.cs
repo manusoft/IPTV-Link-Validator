@@ -1,10 +1,4 @@
-﻿using IPTVAPI.Core.Data;
-using IPTVAPI.Core.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-
-namespace IPTVAPI.Core.Services;
+﻿namespace IPTVAPI.Core.Services;
 
 public class DataService
 {
@@ -45,8 +39,14 @@ public class DataService
 
     public async Task UpdateStreamAsync(OfflineStream entity)
     {
-        context.Streams.Update(entity);
-        await context.SaveChangesAsync();
+        var currentStream = context.Streams.FirstOrDefault(stream => stream.Id == entity.Id);
+
+        if (currentStream is not null)
+        {
+            currentStream.CheckCount++;
+            context.Streams.Update(currentStream);
+            await context.SaveChangesAsync();
+        }        
     }
 
     public async Task<IEnumerable<OfflineChannel>> GetChannelsAsync()
