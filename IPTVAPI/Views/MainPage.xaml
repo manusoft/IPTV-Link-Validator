@@ -29,7 +29,7 @@
             Foreground="Gray"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
-            Text="v1.0.3" />
+            Text="v1.0.4" />
 
         <Pivot
             Grid.Row="1"
