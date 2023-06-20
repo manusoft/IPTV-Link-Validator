@@ -1,6 +1,6 @@
 ﻿namespace IPTVAPI.Core.Services;
 
-public class DataService
+public class DataService : IDisposable
 {
     private readonly AppDbContext context;
 
@@ -36,7 +36,7 @@ public class DataService
             streamFound.CheckCount = stream.CheckCount;
             streamFound.CreatedAt = stream.CreatedAt;
             streamFound.UpdatedAt = stream.UpdatedAt;
-            context.Update(streamFound);
+            context.Streams.Update(streamFound);
         }
 
         try
@@ -51,12 +51,13 @@ public class DataService
 
 
     public async Task UpdateStreamAsync(OfflineStream entity)
-    {
-        context.Streams.Update(entity);
-
+    {     
         try
         {
-
+            //context.Streams.Update(entity);
+            context.Attach(entity);
+            context.Entry(entity).State = EntityState.Modified;
+            await context.SaveChangesAsync();
         }
         catch (Exception ex)
         {
@@ -79,5 +80,10 @@ public class DataService
             .OrderBy(s => s.ChannelId)
             .AsNoTracking()
             .ToListAsync();
+    }
+
+    public void Dispose()
+    {
+        this.context.Dispose();
     }
 }
