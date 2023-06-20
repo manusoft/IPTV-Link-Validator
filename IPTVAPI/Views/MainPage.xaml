@@ -433,7 +433,8 @@
                             <controls:DataGridTextColumn Binding="{Binding Id}" Header="Id" />
                             <controls:DataGridTextColumn Binding="{Binding ChannelId}" Header="Channel Name" />
                             <controls:DataGridTextColumn Binding="{Binding IsOnline}" Header="Online Status" />
-                            <controls:DataGridTextColumn Binding="{Binding LastCheckedAt}" Header="Last Checked" />
+                            <controls:DataGridTextColumn Binding="{Binding CheckCount}" Header="Check Count" />
+                            <controls:DataGridTextColumn Binding="{Binding UpdatedAt}" Header="Last Checked" /> 
                             <controls:DataGridTextColumn Binding="{Binding Url}" Header="Url" />
                         </controls:DataGrid.Columns>
                     </controls:DataGrid>

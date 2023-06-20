@@ -4,11 +4,11 @@
 
 This repository contains a WinUI3 application that fetches data from the [IPTV-ORG API](https://github.com/iptv-org/api) to validate stream quality and save channel and streams to a local database. The application provides functionality to validate streams, update their state in the database, and save all working channels and their streams to a JSON file, either by country or for all channels.
 
-![111](https://github.com/manusoft/IPTVAPI/assets/83714923/625686b0-be4c-491d-bcb3-d9fa2611ee7e)
-![1122](https://github.com/manusoft/IPTVAPI/assets/83714923/f9926abc-c45d-4984-9ada-b3ac1121701b)
-![222](https://github.com/manusoft/IPTVAPI/assets/83714923/8c686612-59b8-44b6-8dff-b1cc9c8f365c)
-![333](https://github.com/manusoft/IPTVAPI/assets/83714923/19bc5bd5-8987-46c5-b7d5-5294cd61e0c8)
-![4444](https://github.com/manusoft/IPTVAPI/assets/83714923/754f7df6-df14-4808-92af-a33b67b8aa4f)
+![111](https://github.com/manusoft/IPTVAPI/assets/83714923/47cfbf79-bb96-43e8-96fb-ab59a599fffa)
+![1122](https://github.com/manusoft/IPTVAPI/assets/83714923/e6f1b5aa-1eeb-4420-9d11-fe2d2b5c8dcb)
+![222](https://github.com/manusoft/IPTVAPI/assets/83714923/890d81dc-636b-4194-9c8b-feba81969f0a)
+![333](https://github.com/manusoft/IPTVAPI/assets/83714923/8b9a389d-c724-466f-b745-338cd5a68172)
+![4444](https://github.com/manusoft/IPTVAPI/assets/83714923/52420d28-f1f5-4289-bb68-1cf29e1c7d40)
 
 ## Features
 
