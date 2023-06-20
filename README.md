@@ -2,7 +2,7 @@
 
 <p align="left"><img src="https://visitor-badge.laobi.icu/badge?page_id=manusoft.IPTVAPI" style="max-width: 100%;"></p>
 
-<img height="400" width="500" src="https://github.com/manusoft/IPTVAPI/assets/83714923/059aeddf-1876-4f35-85ef-c73350a931ae">
+<img height="400" src="https://github.com/manusoft/IPTVAPI/assets/83714923/059aeddf-1876-4f35-85ef-c73350a931ae">
 <img height="400" width="500" src="https://github.com/manusoft/IPTVAPI/assets/83714923/1b2c2563-c7f5-4c2b-84ac-b0fc5b42f91b">
 <img height="400" width="500" src="https://github.com/manusoft/IPTVAPI/assets/83714923/f7238d73-82cd-46ea-9a02-e1c7e14eb33a">
 <img height="400" width="500" src="https://github.com/manusoft/IPTVAPI/assets/83714923/8dc2010b-f861-4137-b137-b24fe1384d06">
