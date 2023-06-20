@@ -95,6 +95,8 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock
                                     Text="Channels Count"
@@ -106,6 +108,16 @@
                                     Text="{x:Bind ViewModel.OfflineChannelsCount, Mode=OneWay}"
                                     Style="{StaticResource BodyStrongTextBlockStyle}"/>
                                 <TextBlock
+                                    Grid.Column="2"
+                                    Foreground="LightBlue"
+                                    Text="New Channels"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Column="3"
+                                    Foreground="Orange"
+                                    Text="{x:Bind ViewModel.NewChannelsCount, Mode=OneWay}"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
                                     Grid.Row="1"
                                     Foreground="LightBlue"
                                     Text="Streams Count"
@@ -115,37 +127,50 @@
                                     Grid.Column="1" 
                                     Foreground="DeepSkyBlue"
                                     Text="{x:Bind ViewModel.OfflineStreamsCount, Mode=OneWay}"
-                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>                                
                                 <TextBlock
-                                    Grid.Row="2"
-                                    Foreground="LightBlue"
-                                    Text="New Channels"
-                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
-                                <TextBlock
-                                    Grid.Row="2"
-                                    Grid.Column="1"
-                                    Foreground="Orange"
-                                    Text="{x:Bind ViewModel.NewChannelsCount, Mode=OneWay}"
-                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
-                                <TextBlock
-                                    Grid.Row="3"
+                                    Grid.Row="1"
+                                    Grid.Column="2"
                                     Foreground="LightBlue"
                                     Text="New Streams"
                                     Style="{StaticResource BodyStrongTextBlockStyle}"/>
                                 <TextBlock
-                                    Grid.Row="3"
-                                    Grid.Column="1"
+                                    Grid.Row="1"
+                                    Grid.Column="3"
                                     Foreground="Orange"
                                     Text="{x:Bind ViewModel.NewStreamsCount, Mode=OneWay}"
                                     Style="{StaticResource BodyStrongTextBlockStyle}"/>
                                 <TextBlock
-                                    Grid.Row="4"
+                                    Grid.Row="2"
+                                    Foreground="LightBlue"
+                                    Text="Valid Streams"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Foreground="YellowGreen"
+                                    Text="{x:Bind ViewModel.TrueStreamCount, Mode=OneWay}"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="3"
+                                    Foreground="LightBlue"
+                                    Text="Invalid Streams"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="3"
+                                    Grid.Column="1"
+                                    Foreground="Red"
+                                    Text="{x:Bind ViewModel.FalseStreamCount, Mode=OneWay}"
+                                    Style="{StaticResource BodyStrongTextBlockStyle}"/>
+                                <TextBlock
+                                    Grid.Row="4"                                    
                                     Foreground="LightBlue"
                                     Text="Last Updated"
                                     Style="{StaticResource BodyStrongTextBlockStyle}"/>
                                 <TextBlock
                                     Grid.Row="4"
-                                    Grid.Column="1"  
+                                    Grid.Column="1" 
+                                    Grid.ColumnSpan="4"
                                     Foreground="LightGray"
                                     Text="{x:Bind ViewModel.LastOfflineUpdateAt, Mode=OneWay}"
                                     Style="{StaticResource BodyStrongTextBlockStyle}"/>

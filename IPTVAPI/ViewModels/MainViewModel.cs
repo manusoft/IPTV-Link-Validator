@@ -75,6 +75,12 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
                 if (NewChannelsCount < 0) { NewChannelsCount = 0; }
                 if (NewStreamsCount < 0) { NewStreamsCount = 0; }
             }
+
+            if(OfflineStreamsList is not null)
+            {
+                TrueStreamCount = OfflineStreamsList.Where(stream=> stream.IsOnline == true).Count();
+                FalseStreamCount = OfflineStreamsList.Where(stream=>stream.IsOnline == false).Count();
+            }
         }
         catch (Exception ex)
         {
@@ -415,7 +421,7 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
         }
         catch (Exception ex)
         {
-            ShowDialog("Error", ex.InnerException?.Message);
+            ShowDialog("Error", ex.Message);
         }
         finally
         {
@@ -588,6 +594,12 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
 
     [ObservableProperty]
     int onlineCount;
+
+    [ObservableProperty]
+    int trueStreamCount;
+
+    [ObservableProperty]
+    int falseStreamCount;
 
     [ObservableProperty]
     string? progressText;
