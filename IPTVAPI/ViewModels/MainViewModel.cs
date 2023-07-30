@@ -1,4 +1,6 @@
-﻿namespace IPTVAPI.ViewModels;
+﻿using Windows.Networking.Connectivity;
+
+namespace IPTVAPI.ViewModels;
 
 public partial class MainViewModel : BaseViewModel, INavigationAware
 {
@@ -76,10 +78,10 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
                 if (NewStreamsCount < 0) { NewStreamsCount = 0; }
             }
 
-            if(OfflineStreamsList is not null)
+            if (OfflineStreamsList is not null)
             {
-                TrueStreamCount = OfflineStreamsList.Where(stream=> stream.IsOnline == true).Count();
-                FalseStreamCount = OfflineStreamsList.Where(stream=>stream.IsOnline == false).Count();
+                TrueStreamCount = OfflineStreamsList.Where(stream => stream.IsOnline == true).Count();
+                FalseStreamCount = OfflineStreamsList.Where(stream => stream.IsOnline == false).Count();
             }
         }
         catch (Exception ex)
@@ -283,141 +285,150 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
             // Check all online streams
             foreach (var stream in OnlineStreamList)
             {
-                cancellationToken.ThrowIfCancellationRequested();
+                ConnectionProfile profile = NetworkInformation.GetInternetConnectionProfile();
 
-                ProgressText = $"{CompletedCount} of {TotalStreamsCount}";
-                ChannelName = stream.Channel;
-                StatusText = stream.Url;
-                UpdatedDate = DateTime.Now.ToString();
-
-                // Get stream from database
-                var getOffStream = OfflineStreamsList.FirstOrDefault(s => s.Url == stream.Url);
-
-                // Stream found in the databsae
-                if (getOffStream is not null)
+                if (profile != null && profile.GetNetworkConnectivityLevel() == NetworkConnectivityLevel.InternetAccess)
                 {
-                    TimeSpan timeSpan = DateTime.Now - getOffStream.UpdatedAt;
 
-                    ChannelName = $"{ChannelName} ({timeSpan.Days.ToString()} days)";
+                    cancellationToken.ThrowIfCancellationRequested();
 
-                    // Check if exceed 7 days
-                    if (timeSpan.Days > 7)
+                    ProgressText = $"{CompletedCount} of {TotalStreamsCount}";
+                    ChannelName = stream.Channel;
+                    StatusText = stream.Url;
+                    UpdatedDate = DateTime.Now.ToString();
+
+                    // Get stream from database
+                    var getOffStream = OfflineStreamsList.FirstOrDefault(s => s.Url == stream.Url);
+
+                    // Stream found in the databsae
+                    if (getOffStream is not null)
                     {
-                        var isValid = await IsUrlAccessible(getOffStream.Url, cancellationToken);
+                        TimeSpan timeSpan = DateTime.Now - getOffStream.UpdatedAt;
+
+                        ChannelName = $"{ChannelName} ({timeSpan.Days.ToString()} days)";
+
+                        // Check if exceed 7 days
+                        if (timeSpan.Days > 7)
+                        {
+                            var isValid = await IsUrlAccessible(getOffStream.Url, cancellationToken);
+
+                            if (isValid) // valid then set online status as true
+                            {
+                                OfflineStream offlineStream = new OfflineStream()
+                                {
+                                    Id = getOffStream.Id,
+                                    ChannelId = getOffStream.ChannelId,
+                                    Url = getOffStream.Url,
+                                    IsOnline = true,
+                                    CheckCount = getOffStream.CheckCount + 1,
+                                    CreatedAt = getOffStream.CreatedAt,
+                                    UpdatedAt = DateTime.Now,
+                                };
+
+                                await dataService.UpdateStreamAsync(offlineStream);
+
+                                OnlineCount++;
+                            }
+                            else // not valid then online startus as false
+                            {
+                                OfflineStream offlineStream = new OfflineStream()
+                                {
+                                    Id = getOffStream.Id,
+                                    ChannelId = getOffStream.ChannelId,
+                                    Url = getOffStream.Url,
+                                    IsOnline = false,
+                                    CheckCount = getOffStream.CheckCount + 1,
+                                    CreatedAt = getOffStream.CreatedAt,
+                                    UpdatedAt = DateTime.Now,
+                                };
+
+                                await dataService.UpdateStreamAsync(offlineStream);
+
+                                OfflineCount++;
+                            }
+                        }
+                    }
+                    else // Stream not found in the database
+                    {
+                        var isValid = await IsUrlAccessible(stream.Url, cancellationToken);
 
                         if (isValid) // valid then set online status as true
                         {
-                            OfflineStream offlineStream = new OfflineStream()
+                            var channel = OnlineChannelList.FirstOrDefault(c => c.Id == stream.Channel);
+
+                            if (channel is not null)
                             {
-                                Id = getOffStream.Id,
-                                ChannelId = getOffStream.ChannelId,
-                                Url = getOffStream.Url,
-                                IsOnline = true,
-                                CheckCount = getOffStream.CheckCount + 1,
-                                CreatedAt = getOffStream.CreatedAt,
-                                UpdatedAt = DateTime.Now,
-                            };
+                                OfflineChannel offlineChannel = new OfflineChannel()
+                                {
+                                    Id = channel.Id,
+                                    Name = channel.Name,
+                                    Country = channel.Country,
+                                    Languages = String.Join(',', channel.Languages),  // read value.Split(',').ToList()
+                                    Categories = String.Join(',', channel.Categories),
+                                    IsNsfw = channel.IsNsfw,
+                                    Website = channel.Website,
+                                    Logo = channel.Logo,
+                                };
 
-                            await dataService.UpdateStreamAsync(offlineStream);
+                                OfflineStream offlineStream = new OfflineStream()
+                                {
+                                    ChannelId = stream.Channel,
+                                    Url = stream.Url,
+                                    IsOnline = true,
+                                    CheckCount = 0,
+                                    CreatedAt = DateTime.Now,
+                                    UpdatedAt = DateTime.Now,
+                                };
 
-                            OnlineCount++;
+                                await dataService.CreateOrUpdateAsync(offlineChannel, offlineStream);
+
+                                OnlineCount++;
+                                newonline++;
+                            }
                         }
                         else // not valid then online startus as false
                         {
-                            OfflineStream offlineStream = new OfflineStream()
+                            var channel = OnlineChannelList.FirstOrDefault(c => c.Id == stream.Channel);
+
+                            if (channel is not null)
                             {
-                                Id = getOffStream.Id,
-                                ChannelId = getOffStream.ChannelId,
-                                Url = getOffStream.Url,
-                                IsOnline = false,
-                                CheckCount = getOffStream.CheckCount + 1,
-                                CreatedAt = getOffStream.CreatedAt,
-                                UpdatedAt = DateTime.Now,
-                            };
+                                OfflineChannel offlineChannel = new OfflineChannel()
+                                {
+                                    Id = channel.Id,
+                                    Name = channel.Name,
+                                    Country = channel.Country,
+                                    Languages = String.Join(',', channel.Languages),  // read value.Split(',').ToList()
+                                    Categories = String.Join(',', channel.Categories),
+                                    IsNsfw = channel.IsNsfw,
+                                    Website = channel.Website,
+                                    Logo = channel.Logo,
+                                };
 
-                            await dataService.UpdateStreamAsync(offlineStream);
+                                OfflineStream offlineStream = new OfflineStream()
+                                {
+                                    ChannelId = stream.Channel,
+                                    Url = stream.Url,
+                                    IsOnline = false,
+                                    CheckCount = 0,
+                                    CreatedAt = DateTime.Now,
+                                    UpdatedAt = DateTime.Now,
+                                };
 
-                            OfflineCount++;
+                                await dataService.CreateOrUpdateAsync(offlineChannel, offlineStream);
+                                OfflineCount++;
+                                newoffline++;
+                            }
                         }
                     }
+                    //await PopulateOfflineDataAsync();
+                    CompletedCount++;
+                    Debug.WriteLine(CompletedCount);
                 }
-                else // Stream not found in the database
+                else
                 {
-                    var isValid = await IsUrlAccessible(stream.Url, cancellationToken);
-
-                    if (isValid) // valid then set online status as true
-                    {
-                        var channel = OnlineChannelList.FirstOrDefault(c => c.Id == stream.Channel);
-
-                        if (channel is not null)
-                        {
-                            OfflineChannel offlineChannel = new OfflineChannel()
-                            {
-                                Id = channel.Id,
-                                Name = channel.Name,
-                                Country = channel.Country,
-                                Languages = String.Join(',', channel.Languages),  // read value.Split(',').ToList()
-                                Categories = String.Join(',', channel.Categories),
-                                IsNsfw = channel.IsNsfw,
-                                Website = channel.Website,
-                                Logo = channel.Logo,
-                            };
-
-                            OfflineStream offlineStream = new OfflineStream()
-                            {
-                                ChannelId = stream.Channel,
-                                Url = stream.Url,
-                                IsOnline = true,
-                                CheckCount = 0,
-                                CreatedAt =DateTime.Now,
-                                UpdatedAt = DateTime.Now,
-                            };
-
-                            await dataService.CreateOrUpdateAsync(offlineChannel, offlineStream);
-
-                            OnlineCount++;
-                            newonline++;
-                        }
-                    }
-                    else // not valid then online startus as false
-                    {
-                        var channel = OnlineChannelList.FirstOrDefault(c => c.Id == stream.Channel);
-
-                        if (channel is not null)
-                        {
-                            OfflineChannel offlineChannel = new OfflineChannel()
-                            {
-                                Id = channel.Id,
-                                Name = channel.Name,
-                                Country = channel.Country,
-                                Languages = String.Join(',', channel.Languages),  // read value.Split(',').ToList()
-                                Categories = String.Join(',', channel.Categories),
-                                IsNsfw = channel.IsNsfw,
-                                Website = channel.Website,
-                                Logo = channel.Logo,
-                            };
-
-                            OfflineStream offlineStream = new OfflineStream()
-                            {
-                                ChannelId = stream.Channel,
-                                Url = stream.Url,
-                                IsOnline = false,
-                                CheckCount = 0,
-                                CreatedAt = DateTime.Now,
-                                UpdatedAt = DateTime.Now,
-                            };
-
-                            await dataService.CreateOrUpdateAsync(offlineChannel, offlineStream);
-                            OfflineCount++;
-                            newoffline++;
-                        }
-                    }
+                    return;
                 }
-                //await PopulateOfflineDataAsync();
-                CompletedCount++;
-                Debug.WriteLine(CompletedCount);
             }
-
         }
         catch (Exception ex)
         {
@@ -433,6 +444,7 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
         try
         {
             HttpClient client = new HttpClient();
+            client.Timeout = TimeSpan.FromSeconds(10);
             HttpResponseMessage response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Head, url), cancellationToken);
             return response.StatusCode == HttpStatusCode.OK;
         }

@@ -29,7 +29,7 @@
             Foreground="Gray"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
-            Text="v1.0.4" />
+            Text="v1.0.5" />
 
         <Pivot
             Grid.Row="1"
@@ -293,7 +293,7 @@
                                 <TextBlock
                                     Text="Validate Streams"
                                     Style="{StaticResource SubtitleTextBlockStyle}"
-                                    VerticalAlignment="Center"/>
+                                    VerticalAlignment="Center"/>                               
                                 <ProgressRing
                                     Grid.Column="1"
                                     IsIndeterminate="{x:Bind ViewModel.IsValidationBusy, Mode=OneWay}" 
@@ -439,6 +439,19 @@
                         </controls:DataGrid.Columns>
                     </controls:DataGrid>
                 </Grid>
+            </PivotItem>
+            <PivotItem Header="Settings">
+                <StackPanel 
+                    Margin="0,10"
+                    Orientation="Vertical">                    
+                    <NumberBox 
+                        Header="Select Days:"
+                        Minimum="0" 
+                        Maximum="7"
+                        Value="0"
+                        Width="100"
+                        SpinButtonPlacementMode="Compact"/>
+                </StackPanel>
             </PivotItem>
         </Pivot>
     </Grid>

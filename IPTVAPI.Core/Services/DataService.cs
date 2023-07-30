@@ -54,10 +54,19 @@ public class DataService : IDisposable
     {     
         try
         {
-            //context.Streams.Update(entity);
-            context.Attach(entity);
-            context.Entry(entity).State = EntityState.Modified;
-            await context.SaveChangesAsync();
+            //context.Entry(entity).State = EntityState.Modified;
+            //await context.SaveChangesAsync();
+
+            var existingEntity = await context.Streams.FindAsync(entity.Id);
+
+            if(existingEntity is not null) 
+            {
+                existingEntity.IsOnline = entity.IsOnline;
+                existingEntity.CheckCount = entity.CheckCount;
+                existingEntity.UpdatedAt = entity.UpdatedAt;
+
+                await context.SaveChangesAsync();
+            }            
         }
         catch (Exception ex)
         {
