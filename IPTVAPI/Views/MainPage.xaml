@@ -22,14 +22,15 @@
             Grid.Row="0"
             x:Uid="Main_Title"
             Margin="10,0"
-            Style="{StaticResource PageTitleStyle}" />
+            Style="{StaticResource PageTitleStyle}" 
+            Foreground="SeaGreen"/>
         <TextBlock
             Grid.Row="0"
             Margin="0,0,10,0"
             Foreground="Gray"
             HorizontalAlignment="Right"
             VerticalAlignment="Center"
-            Text="v1.0.5" />
+            Text="v1.0.6" />
 
         <Pivot
             Grid.Row="1"

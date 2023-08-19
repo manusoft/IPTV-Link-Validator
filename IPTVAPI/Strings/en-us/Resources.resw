@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AppDisplayName" xml:space="preserve">
-    <value>IPTVAPI</value>
+    <value>IPTV API - Stream Validator</value>
   </data>
   <data name="AppDescription" xml:space="preserve">
-    <value>IPTVAPI</value>
+    <value>IPTV API - Stream Validator</value>
   </data>
   <data name="Main_Title.Text" xml:space="preserve">
-    <value>IPTV API</value>
+    <value>IPTV API - Stream Validator</value>
     <comment>Page title for MainPage</comment>
   </data>
 </root>

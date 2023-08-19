@@ -444,7 +444,7 @@ public partial class MainViewModel : BaseViewModel, INavigationAware
         try
         {
             HttpClient client = new HttpClient();
-            client.Timeout = TimeSpan.FromSeconds(10);
+            client.Timeout = TimeSpan.FromSeconds(5);
             HttpResponseMessage response = await client.SendAsync(new HttpRequestMessage(HttpMethod.Head, url), cancellationToken);
             return response.StatusCode == HttpStatusCode.OK;
         }
